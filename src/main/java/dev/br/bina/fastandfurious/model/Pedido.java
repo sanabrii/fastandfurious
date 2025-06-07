@@ -13,10 +13,10 @@ import jakarta.persistence.GenerationType;
 public class Pedido {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // opcional, mas bom pra gerar IDs automaticamente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;   // ABERTO, PRONTO, ENTREGUE, CANCELADO
+    private String status; 
     private String detalhes;
 
     public Pedido() {}
@@ -39,4 +39,3 @@ public class Pedido {
     
     
 }
-
