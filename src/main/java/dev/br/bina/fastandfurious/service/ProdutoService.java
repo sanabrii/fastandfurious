@@ -9,13 +9,12 @@ import dev.br.bina.fastandfurious.repositories.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ProdutoService {
 
-    @Autowired
     private final ProdutoRepository repository;
 
     public ProdutoService(ProdutoRepository repository) {
@@ -38,18 +37,25 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
-    public Produto atualizar(Long id, Produto produto) {
-        Produto existente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+    public Produto atualizar(Long id, Produto produtoAtualizado) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Produto com ID " + id + " não encontrado."));
 
-        existente.setNome(produto.getNome());
-        existente.setCategoria(produto.getCategoria());
-        existente.setPreco(produto.getPreco());
+        produto.setNome(produtoAtualizado.getNome());
+        produto.setDescricao(produtoAtualizado.getDescricao());
+        produto.setPreco(produtoAtualizado.getPreco());
+        produto.setCategoria(produtoAtualizado.getCategoria());
 
-        return repository.save(existente);
+        return repository.save(produto);
     }
 
     public void deletar(Long id) {
-        repository.deleteById(id);
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Produto com id " + id + " não encontrado");
     }
+        repository.deleteById(id);
+}
+
+
+
 }
