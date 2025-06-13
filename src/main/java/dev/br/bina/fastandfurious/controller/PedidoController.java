@@ -4,6 +4,7 @@
  */
 package dev.br.bina.fastandfurious.controller;
 
+import dev.br.bina.fastandfurious.dto.PedidoRequestDTO;
 import dev.br.bina.fastandfurious.model.Pedido;
 import dev.br.bina.fastandfurious.service.PedidoService;
 import org.springframework.http.HttpStatus;
@@ -17,16 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RestController
 @RequestMapping("/fastandfurious/pedido")
 public class PedidoController {
-
-    private final PedidoService pedidoService;
-
+    
     @Autowired
-    public PedidoController(PedidoService pedidoService) {
-        this.pedidoService = pedidoService;
-    }
-
+    private PedidoService pedidoService;
+    
     @GetMapping
-    public List<Pedido> listarPedidos() {
+    public List<PedidoRequestDTO> listarPedidos() {
         return pedidoService.listarTodos();
     }
 
@@ -78,4 +75,15 @@ public class PedidoController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    
+    @PostMapping("/v1")
+    public ResponseEntity<PedidoRequestDTO> criarPedidoV1(@RequestBody PedidoRequestDTO pedidoRequestDTO) {
+        
+        PedidoRequestDTO pedidoResponse = pedidoService.criarPedidoRequestDTO(pedidoRequestDTO);
+        return new ResponseEntity<PedidoRequestDTO>(HttpStatus.CREATED);
+    
+    }
+
+    
 }
